@@ -1,0 +1,11 @@
+# Vendored template framework — shipped as-is by the17thstudio/node-template.
+# We don't lint or modify it; project linting targets application code only.
+core/
+
+# Generated / non-source
+node_modules/
+endpoint-data/
+dist/
+build/
+coverage/
+specs/

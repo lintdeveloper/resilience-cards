@@ -1,0 +1,12 @@
+# Vendored template framework — shipped as-is by the17thstudio/node-template.
+# Keep byte-identical to upstream; never reformat.
+core/
+specs/
+
+# Generated / non-source
+node_modules/
+endpoint-data/
+dist/
+build/
+coverage/
+package-lock.json

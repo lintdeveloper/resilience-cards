@@ -1,0 +1,49 @@
+# ── Dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+.node-gyp/
+# Template uses local `file:` core packages; lockfile churns heavily, so it is
+# intentionally untracked (matches upstream node-template).
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# ── Environment & secrets ─────────────────────────────────────────────────────
+.env
+*.env
+!.env.example
+*.pem
+*.key
+
+# ── Runtime / generated ───────────────────────────────────────────────────────
+# `app.js` writes endpoint metadata here when CAN_LOG_ENDPOINT_INFORMATION is set
+endpoint-data/
+playground/
+testlogs/
+dist/
+build/
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+logs/
+*.log
+*.logs
+npm-debug.log*
+
+# ── Test & coverage ───────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── IDEs ─────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.glitchdotcom.json
+
+# ── Claude Code ──────────────────────────────────────────────────────────────
+# settings.local.json = personal permission overrides — never commit.
+# settings.json = shared team hooks/permissions — SHOULD be committed.
+.claude/settings.local.json
+.claude/worktrees/
