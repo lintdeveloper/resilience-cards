@@ -92,6 +92,8 @@ VSL syntax (verified against `core/validator-vsl/tests/*.js`):
 - Enums (shorthand): `status string(draft|published)`. Optional fields: `slug? string<...>`. Arrays: `links[] { ... }` or `tags[] string<...>`.
 - `NO_SINGLE_ERRORS=1` collects all field errors instead of throwing on the first.
 
+**VSL has no regex / pattern / alphanumeric constraint, and no cross-field conditional.** So rules like `slug` charset `[A-Za-z0-9_-]`, `access_code` "6 alphanumeric chars", and "access_code required iff private" are **business rules in the service** (raised with `throwAppError` + the assessment code), not VSL field constraints. Use VSL only for type/length/enum/`startsWith`. See `docs/adr/0003-validation-and-slug-strategy.md`.
+
 ## Conventions
 
 - **`id` vs `_id`**: API responses must expose the Mongo `_id` as `id` (ULID). Never leak `_id`. Generate ids with `ulid()` from `@app-core/randomness`.
@@ -102,5 +104,7 @@ VSL syntax (verified against `core/validator-vsl/tests/*.js`):
 ## Reference docs in this repo
 
 - `docs/creator-card-spec.md` — the authoritative assessment contract.
+- `docs/adr/` — architecture decision records (template-vs-monorepo, error-code→HTTP, validation/slug strategy). Read these for the *why*.
+- `specs/creator-cards/` — VSL specs for this service: `data/creator-card.go` (model) + `endpoint/*.endpoint.go` (the three API contracts). `.go` extension is for syntax highlighting only — these are VSL, not Go.
 - `README.md` and `documentation.md` — upstream template's own architecture/usage guides (detailed VSL + core API reference). Keep for reference.
 - `specs/examples/` — example endpoint/data specs from the template.
