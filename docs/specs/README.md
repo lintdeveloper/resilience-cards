@@ -15,7 +15,7 @@ Each field rule is enforced in one of three places (see [ADR 0003](../adr/0003-v
 | Layer | Enforces | Mechanism |
 |-------|----------|-----------|
 | **VSL** | type, length, enum, `startsWith` | `@app-core/validator` spec, parsed once per service |
-| **Business rule** | charset (regex), cross-field conditionals, uniqueness | explicit checks → `throwAppError(msg, code, { context:{ code } })` |
+| **Business rule** | charset (no regex — allowed-char set), cross-field conditionals, uniqueness | explicit checks → `throwAppError(msg, ERROR_CODE, { context:{ code } })` |
 | **Auto** | slug generation, timestamps, id | set by the service before persisting |
 
 VSL failures → HTTP 400 with no custom code. Business-rule failures → the HTTP status + assessment code listed per endpoint.

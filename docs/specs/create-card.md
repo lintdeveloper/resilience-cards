@@ -43,11 +43,13 @@ Create a creator card. Returns **HTTP 200** with the created card on success.
 
 ## Responses
 
-**200** — `{ status, message, data }` where `data` is the card (with `id`, `created`, `updated`, `deleted: null`; **no `access_code`**).
+**200** — message `"Creator Card Created Successfully."`, `data` is the full card including `id`, `created`, `updated`, `deleted: null`, and **`access_code`** (`null` for public, the value for private — create *does* return it; only GET omits it).
 
-| Error | HTTP | When |
-|-------|------|------|
-| field validation | 400 | type/length/enum/required failures (no custom code) |
-| `SL02` | 400 | client-supplied slug already taken |
-| `AC01` | 400 | `access_code` required on a private card |
-| `AC05` | 400 | `access_code` provided on a public card |
+| Error | HTTP | Code | Message |
+|-------|------|------|---------|
+| field validation | 400 | — (none) | framework validator message(s) |
+| slug taken | 400 | `SL02` | "Slug is already taken" |
+| access_code required | 400 | `AC01` | "access_code is required when access_type is private" |
+| access_code on public | 400 | `AC05` | "access_code can only be set on private cards" |
+
+Business errors return `{ status: "error", message, data: { code } }` (code nested under `data` — see [ADR 0002](../adr/0002-error-codes-to-http-status.md) for why it isn't top-level). Field-validation errors come from the VSL validator with no custom code.

@@ -27,16 +27,25 @@ Two facts fall out of reading that code and `core/errors/constants.js`:
 
 ## Decision
 
-- **Drive the HTTP status through `errorCode`:**
-  - 400 (`SL02`, `AC01`, `AC05`): throw with any code not in the mapping — it defaults to 400. (VSL field errors already throw `SPCL_VALIDATION` → 400.)
-  - 404 (`NF01`, `NF02`): throw with `ERROR_CODE.NOTFOUND` (`'RESOURCE_NOT_FOUND'`).
-  - 403 (`AC03`, `AC04`): throw with `ERROR_CODE.INVLDREQ` (`'INVALID_REQUEST'`).
-- **Surface the assessment code explicitly** by passing it in `options.context` (→ response `data`), e.g.
-  `throwAppError('Card not found', ERROR_CODE.NOTFOUND, { context: { code: 'NF01' } })`.
-- Do **not** modify the vendored `core/errors` mapping or the server (ADR 0001).
+Keep `core/` **pristine** (ADR 0001) and work within the server's actual behaviour, verified empirically by throwing test errors against the real server:
+
+| Thrown | Result |
+|--------|--------|
+| `throwAppError(msg, 'NF01')` | HTTP **400**, `{status, message}` — code value unmapped → default 400, no code in body |
+| `throwAppError(msg, ERROR_CODE.NOTFOUND, { context: { code: 'NF01' } })` | HTTP **404**, `{status, message, data: { code: 'NF01' } }` |
+
+So:
+
+- **Drive HTTP status through `errorCode`** (the value strings, mapped in `core/errors/constants.js`):
+  - 400 (`SL02`, `AC01`, `AC05`): `ERROR_CODE.INVLDDATA` (`'INVALID_REQUEST_DATA'`, unmapped → defaults to 400). Do **not** use `DUPLRCRD` for `SL02` — it maps to 409. (VSL field errors already throw `SPCL_VALIDATION` → 400.)
+  - 404 (`NF01`, `NF02`): `ERROR_CODE.NOTFOUND` (`'RESOURCE_NOT_FOUND'`).
+  - 403 (`AC03`, `AC04`): `ERROR_CODE.INVLDREQ` (`'INVALID_REQUEST'`).
+- **Carry the assessment code in `options.context`** so it surfaces under response `data`:
+  `throwAppError(Messages.NOT_FOUND, ERROR_CODE.NOTFOUND, { context: { code: 'NF01' } })`.
+- Centralise this in one app-level helper (e.g. `services/creator-cards/helpers/throw-card-error.js`) mapping each assessment code → `(ERROR_CODE, message)`, so the pattern is consistent and changeable in one place.
 
 ## Consequences
 
-- **Positive:** Correct HTTP statuses with zero changes to vendored framework code; the specific code is always present in the response for the grader's distinct-code checks.
-- **Risk / open item:** The exact JSON location the grader expects the code in (`data.code` vs a top-level `code` vs the message) is not pinned down by the spec. We default to `data.code`; **verify against the assessment's expected responses** and adjust the single helper if needed. Centralising error-raising in one helper keeps this a one-line change.
-- **Negative:** Slight indirection — readers must know that a 400 is "the default," not an explicit mapping. Documented here and in `CLAUDE.md`.
+- **Positive:** Correct HTTP statuses and the distinguishing code present in every business-error response, with **zero changes to vendored framework code**.
+- **⚠️ Accepted risk:** The assessment's documented error shape is top-level `{ status, message, code }`, but the unmodified server emits `{ status, message, data: { code } }` — our code is nested under `data`. Producing a *top-level* `code` is impossible without editing `core/express/server.js`, which we have chosen not to do. If grading checks `body.code` strictly (rather than `body.data.code`), business-error assertions could fail. Revisit this decision if the submission feedback or a test harness shows a strict top-level check; the centralised helper keeps the fix to one place (and ADR would be superseded to allow the one-line core edit).
+- **Negative:** Slight indirection — 400 is "the default," not an explicit map entry; readers must know that.

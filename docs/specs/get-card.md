@@ -22,11 +22,13 @@ Evaluate in this exact order; return on the first failure:
 
 ## Responses
 
-**200** — `{ status, message, data }` where `data` is the card. **`access_code` is never included.**
+**200** — message `"Creator Card Retrieved Successfully."`, `data` is the card with the `access_code` field **omitted entirely** (not even `null`).
 
-| Error | HTTP | When |
-|-------|------|------|
-| `NF01` | 404 | not found / deleted |
-| `NF02` | 404 | exists but draft |
-| `AC03` | 403 | private, no `access_code` |
-| `AC04` | 403 | private, wrong `access_code` |
+| Error | HTTP | Code | Message |
+|-------|------|------|---------|
+| not found / deleted | 404 | `NF01` | "Creator card not found" |
+| exists but draft | 404 | `NF02` | "Creator card not found" |
+| private, no `access_code` | 403 | `AC03` | "This card is private. An access code is required" |
+| private, wrong `access_code` | 403 | `AC04` | "Invalid access code" |
+
+Errors return `{ status: "error", message, data: { code } }` (see [ADR 0002](../adr/0002-error-codes-to-http-status.md)).

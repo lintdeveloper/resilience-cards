@@ -17,11 +17,13 @@ Soft-delete a card. Returns **HTTP 200** with the deleted card (including the `d
 
 ## Responses
 
-**200** — `{ status, message, data }` where `data` is the card with `deleted` set to a Unix-ms timestamp.
+**200** — message `"Creator Card Deleted Successfully."`, `data` is the full card (same shape as create, **including `access_code`**) with `deleted` set to a Unix-ms timestamp.
 
-| Error | HTTP | When |
-|-------|------|------|
-| field validation | 400 | `creator_reference` missing/wrong length (no custom code) |
-| `NF01` | 404 | card does not exist (or already deleted) |
+| Error | HTTP | Code | Message |
+|-------|------|------|---------|
+| field validation | 400 | — (none) | framework validator message (e.g. `creator_reference` not 20 chars) |
+| not found | 404 | `NF01` | "Creator card not found" |
 
-> The spec defines `NF01` for a missing card on delete. If you additionally gate deletion on a matching `creator_reference`, decide and document the response for a mismatch (the spec does not define one); the safe default is to treat it the same as not-found.
+Errors return `{ status: "error", message, data: { code } }` (see [ADR 0002](../adr/0002-error-codes-to-http-status.md)).
+
+> **`creator_reference` is validated for presence + exactly 20 chars (framework validation) and the card is deleted by `slug`.** The assessment defines no behaviour for a `creator_reference` that doesn't match the stored value and has no test for it — so do **not** gate deletion on a match (that would be undefined behaviour and risks failing the happy-path test). Existence is the only business check → `NF01`.

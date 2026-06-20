@@ -1,6 +1,11 @@
 # Data model — Creator Card
 
-The Mongo `_id` is a **ULID** and is serialized as **`id`** in every API response (never `_id`). `access_code` is **never** returned in any response.
+The Mongo `_id` is a **ULID** (26-char string, not an ObjectId) and is serialized as **`id`** in every API response (never `_id`).
+
+**`access_code` response rule (verified against the spec examples):**
+- `POST /creator-cards` (create) → **included** (`null` for public cards, the value for private).
+- `DELETE /creator-cards/:slug` → **included** (same as create).
+- `GET /creator-cards/:slug` → **omitted entirely** (never present, even as `null`).
 
 ## Fields
 
@@ -9,7 +14,7 @@ The Mongo `_id` is a **ULID** and is serialized as **`id`** in every API respons
 | `id` | string | ULID, 26 chars | auto | serialized from `_id` |
 | `title` | string | 3–100 chars | VSL | |
 | `description` | string | ≤ 500 chars | VSL | optional |
-| `slug` | string | 5–50 chars; charset `[A-Za-z0-9_-]`; unique | VSL (length) + business (charset, uniqueness) | auto-generated from `title` when omitted |
+| `slug` | string | 5–50 chars; charset letters/numbers/`-`/`_`; unique | VSL (length) + business (charset, uniqueness) | charset checked **without regex** (allowed-char set); auto-generated from `title` when omitted |
 | `creator_reference` | string | exactly 20 chars | VSL (`length:20`) | owner secret; required to delete |
 | `links[]` | array | non-empty | VSL | |
 | `links[].title` | string | 1–100 chars | VSL | |
@@ -22,7 +27,7 @@ The Mongo `_id` is a **ULID** and is serialized as **`id`** in every API respons
 | `service_rates.rates[].amount` | number | positive integer, minor units | VSL (`min:1`) + business (integer) | e.g. kobo/cents |
 | `status` | string | enum `draft \| published` | VSL | |
 | `access_type` | string | enum `public \| private`; default `public` | VSL | |
-| `access_code` | string | exactly 6 alphanumeric chars | VSL (`length:6`) + business (alphanumeric + conditional) | required iff private, forbidden iff public; never returned |
+| `access_code` | string | exactly 6 alphanumeric chars | VSL (`length:6`) + business (alphanumeric **without regex** + conditional) | required iff private, forbidden iff public; returned on create/delete (null/value), omitted on GET |
 | `created` | number | Unix ms | auto | set on create |
 | `updated` | number | Unix ms | auto | set on create + every update |
 | `deleted` | number \| null | Unix ms | auto | set on soft delete; null while live |
