@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node bootstrap.js",
     "dev": "nodemon app.js",
-    "test": "cross-env USE_MOCK_MODEL=1 mocha --recursive --require dotenv/config",
+    "test": "cross-env USE_MOCK_MODEL=1 PINO_LOG_LEVEL=silent mocha --recursive --require dotenv/config",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",

@@ -37,7 +37,7 @@ Private access via query param: `GET /creator-cards/:slug?access_code=A1B2C3`.
 ## Response envelopes
 
 - **Success:** `{ "status": "success", "message": "<exact message above>", "data": { ...card } }`.
-- **Error (this build):** `{ "status": "error", "message": "...", "data": { "code": "<CODE>" } }`. The assessment *documents* a **top-level** `code`; we keep `core/` pristine so it lands under `data.code` instead — see [ADR 0002](adr/0002-error-codes-to-http-status.md) for the tradeoff and residual risk.
+- **Error:** `{ "status": "error", "message": "...", "code": "<CODE>" }` — `code` at the **top level**, as the spec requires (via a minimal documented edit to `core/express/server.js`; see [ADR 0005](adr/0005-top-level-error-code.md)). VSL field-validation errors return the validator's response (HTTP 400, no custom code).
 
 ## No regex (template rule)
 

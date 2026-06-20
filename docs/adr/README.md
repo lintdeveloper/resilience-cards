@@ -7,6 +7,7 @@ Format: lightweight [MADR](https://adr.github.io/madr/) — **Status · Context 
 | # | Title | Status |
 |---|-------|--------|
 | [0001](0001-use-r17-template-single-app.md) | Use the R17 node-template as a single app (not a monorepo) | Accepted |
-| [0002](0002-error-codes-to-http-status.md) | Map assessment error codes to HTTP status via the template error utility | Accepted |
+| [0002](0002-error-codes-to-http-status.md) | Map assessment error codes to HTTP status via the template error utility | Superseded by 0005 |
 | [0003](0003-validation-and-slug-strategy.md) | Split validation: VSL for field shape, service rules for slug & access_code | Accepted |
 | [0004](0004-adopt-gitflow.md) | Adopt the GitFlow branching model | Accepted |
+| [0005](0005-top-level-error-code.md) | Emit the assessment error code at the top level (minimal core edit) | Accepted |

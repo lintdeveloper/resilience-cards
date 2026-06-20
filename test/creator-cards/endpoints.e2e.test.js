@@ -120,7 +120,7 @@ describe('creator-cards endpoints (e2e)', () => {
 
     expect(res.statusCode).to.equal(400);
     expect(res.data.status).to.equal('error');
-    expect(res.data.data.code).to.equal('SL02');
+    expect(res.data.code).to.equal('SL02');
   });
 
   it('8. rejects a private card with no access_code (400 AC01)', async () => {
@@ -129,7 +129,7 @@ describe('creator-cards endpoints (e2e)', () => {
     const res = await server.post('/creator-cards', { body });
 
     expect(res.statusCode).to.equal(400);
-    expect(res.data.data.code).to.equal('AC01');
+    expect(res.data.code).to.equal('AC01');
   });
 
   it('9. rejects access_code on a public card (400 AC05)', async () => {
@@ -137,7 +137,7 @@ describe('creator-cards endpoints (e2e)', () => {
     const res = await server.post('/creator-cards', { body });
 
     expect(res.statusCode).to.equal(400);
-    expect(res.data.data.code).to.equal('AC05');
+    expect(res.data.code).to.equal('AC05');
   });
 
   it('10. rejects an invalid enum via the framework validator (400, no custom code)', async () => {
@@ -146,8 +146,8 @@ describe('creator-cards endpoints (e2e)', () => {
 
     expect(res.statusCode).to.equal(400);
     expect(res.data.status).to.equal('error');
-    const hasCode = Boolean(res.data.data && res.data.data.code);
-    expect(hasCode).to.equal(false);
+    // framework validation errors carry no custom code (neither top-level nor nested)
+    expect(res.data.code).to.equal(undefined);
   });
 
   it('11. returns 404 NF01 for a non-existent card', async () => {
@@ -155,7 +155,7 @@ describe('creator-cards endpoints (e2e)', () => {
     const res = await server.get('/creator-cards/does-not-exist');
 
     expect(res.statusCode).to.equal(404);
-    expect(res.data.data.code).to.equal('NF01');
+    expect(res.data.code).to.equal('NF01');
   });
 
   it('12. returns 404 NF02 for a draft card', async () => {
@@ -163,7 +163,7 @@ describe('creator-cards endpoints (e2e)', () => {
     const res = await server.get('/creator-cards/george-cooks');
 
     expect(res.statusCode).to.equal(404);
-    expect(res.data.data.code).to.equal('NF02');
+    expect(res.data.code).to.equal('NF02');
   });
 
   it('13. returns 403 AC03 for a private card with no access_code', async () => {
@@ -174,7 +174,7 @@ describe('creator-cards endpoints (e2e)', () => {
     const res = await server.get('/creator-cards/george-cooks');
 
     expect(res.statusCode).to.equal(403);
-    expect(res.data.data.code).to.equal('AC03');
+    expect(res.data.code).to.equal('AC03');
   });
 
   it('14. returns 403 AC04 for a private card with a wrong access_code', async () => {
@@ -185,7 +185,7 @@ describe('creator-cards endpoints (e2e)', () => {
     const res = await server.get('/creator-cards/george-cooks?access_code=WRONG1');
 
     expect(res.statusCode).to.equal(403);
-    expect(res.data.data.code).to.equal('AC04');
+    expect(res.data.code).to.equal('AC04');
   });
 
   it('15. returns 404 NF01 when deleting a non-existent card', async () => {
@@ -195,7 +195,7 @@ describe('creator-cards endpoints (e2e)', () => {
     });
 
     expect(res.statusCode).to.equal(404);
-    expect(res.data.data.code).to.equal('NF01');
+    expect(res.data.code).to.equal('NF01');
   });
 
   it('16. returns 404 NF01 when retrieving a previously deleted card', async () => {
@@ -204,6 +204,6 @@ describe('creator-cards endpoints (e2e)', () => {
     const res = await server.get('/creator-cards/george-cooks');
 
     expect(res.statusCode).to.equal(404);
-    expect(res.data.data.code).to.equal('NF01');
+    expect(res.data.code).to.equal('NF01');
   });
 });
