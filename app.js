@@ -25,12 +25,10 @@ const ENDPOINT_CONFIGS = [
   {
     path: './endpoints/onboarding/',
   },
-  // Creator-cards routes (served at root, e.g. POST /creator-cards). Uncomment
-  // once `endpoints/creator-cards/` contains real .js handlers — app.js
-  // require()s every file in the dir, so an empty/untracked dir breaks boot.
-  // {
-  //   path: './endpoints/creator-cards/',
-  // },
+  // Creator-cards routes, served at root (e.g. POST /creator-cards, no versioning).
+  {
+    path: './endpoints/creator-cards/',
+  },
 ];
 
 function logEndpointMetaData(endpointConfigs) {

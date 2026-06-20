@@ -8,6 +8,8 @@ A **Creator Card Microservice API** built for the R17 "Node.js Backend Engineer 
 
 > The grading rule: *a correct implementation that deviates from the spec or template conventions will be rejected.* Do not introduce TypeScript, a different framework, a different validator, or your own error utilities.
 
+**Status: all three endpoints are implemented** under `endpoints/creator-cards/` (registered in `app.js`), backed by `services/creator-cards/*` + helpers, `models/creator-card.js`, `repository/creator-cards`, and `messages/creator-cards.js`. Verified by 36 passing tests (helper units + e2e for all 16 assessment cases) and a manual real-MongoDB run. See `docs/local-verification.md`.
+
 ## Commands
 
 | Command | What it does |

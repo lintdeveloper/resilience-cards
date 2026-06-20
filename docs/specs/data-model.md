@@ -16,7 +16,7 @@ The Mongo `_id` is a **ULID** (26-char string, not an ObjectId) and is serialize
 | `description` | string | ≤ 500 chars | VSL | optional |
 | `slug` | string | 5–50 chars; charset letters/numbers/`-`/`_`; unique | VSL (length) + business (charset, uniqueness) | charset checked **without regex** (allowed-char set); auto-generated from `title` when omitted |
 | `creator_reference` | string | exactly 20 chars | VSL (`length:20`) | owner secret; required to delete |
-| `links[]` | array | non-empty | VSL | |
+| `links[]` | array | optional | VSL | each entry validated when present |
 | `links[].title` | string | 1–100 chars | VSL | |
 | `links[].url` | string | ≤ 200 chars; starts with `http://` or `https://` | VSL (`maxLength`, `startsWith:http`) | |
 | `service_rates` | object | optional | VSL | when present, fields below required |
