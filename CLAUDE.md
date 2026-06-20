@@ -106,6 +106,7 @@ VSL syntax (verified against `core/validator-vsl/tests/*.js`):
 - **Template code-quality rules** (from `documentation.md` "Code Quality Rules" — graded): **single `return`** per function (declare `response` at top, return once); **one exported function per file**; services take **one object param** `(serviceData, options)`; **validate first**, before any logic; **error messages from `messages/` files**, never hardcoded.
 - **Logging**: use `appLogger` from `@app-core/logger` (`.info/.warn/.error/.errorX`). Never `console.log` in services/endpoints.
 - **Commits**: husky + commitlint enforce **conventional commits** (`feat:`, `fix:`, `chore:`…). `lint-staged` runs prettier + eslint on staged `*.{js,ts}` pre-commit.
+- **Branching (GitFlow)**: work on `feature/*` off `develop`; merge back with `--no-ff`. Never commit directly to `main`/`develop`. `main` stays submission-ready. Full workflow in `CONTRIBUTING.md`; rationale in `docs/adr/0004-adopt-gitflow.md`.
 - **Style**: 2-space indent, single quotes, semicolons, `printWidth` 100 (`.prettierrc`).
 
 ## Reference docs in this repo
