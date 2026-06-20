@@ -52,4 +52,4 @@ Create a creator card. Returns **HTTP 200** with the created card on success.
 | access_code required | 400 | `AC01` | "access_code is required when access_type is private" |
 | access_code on public | 400 | `AC05` | "access_code can only be set on private cards" |
 
-Business errors return `{ status: "error", message, data: { code } }` (code nested under `data` — see [ADR 0002](../adr/0002-error-codes-to-http-status.md) for why it isn't top-level). Field-validation errors come from the VSL validator with no custom code.
+Business errors return `{ status: "error", message, code }` (code at the top level — see [ADR 0005](../adr/0005-top-level-error-code.md)). Field-validation errors come from the VSL validator with no custom code.

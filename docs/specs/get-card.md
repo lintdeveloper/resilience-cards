@@ -31,4 +31,4 @@ Evaluate in this exact order; return on the first failure:
 | private, no `access_code` | 403 | `AC03` | "This card is private. An access code is required" |
 | private, wrong `access_code` | 403 | `AC04` | "Invalid access code" |
 
-Errors return `{ status: "error", message, data: { code } }` (see [ADR 0002](../adr/0002-error-codes-to-http-status.md)).
+Errors return `{ status: "error", message, code }` (top-level `code` — see [ADR 0005](../adr/0005-top-level-error-code.md)).

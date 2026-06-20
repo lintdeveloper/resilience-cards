@@ -26,3 +26,4 @@ Keep the template **as-is at the repository root as a single app.** Do not intro
 - **Negative:** No workspace ergonomics (single `package.json`, no per-package builds). Acceptable: there is exactly one deployable and nothing to share across packages.
 - **Neutral:** If this service were ever grown into multiple services post-assessment, it could be migrated into a monorepo later. That is out of scope here.
 - A monorepo restructure was rejected specifically because reshaping the template would read as a deviation from "follow the template structure."
+- **Exception:** one small, documented edit to `core/express/server.js` was later required to emit the error `code` at the top level as the spec demands (see [ADR 0005](0005-top-level-error-code.md)). The rest of `core/` remains upstream-identical.

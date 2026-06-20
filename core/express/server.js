@@ -247,7 +247,15 @@ function Server(serverConfig = {}) {
           ? error.message
           : 'Some error occured.';
         responseComponents.body.errors = error.details || undefined;
-        responseComponents.body.data = error.context;
+        // resilience-cards: when a business error carries an assessment code
+        // (passed via throwAppError context), surface it at the TOP LEVEL as
+        // `code` (the spec requires { status, message, code } — not nested).
+        // Other errors keep the original behaviour of exposing context as `data`.
+        if (error.context && error.context.code) {
+          responseComponents.body.code = error.context.code;
+        } else {
+          responseComponents.body.data = error.context;
+        }
 
         expressResponse.status(responseComponents.statusCode).json(responseComponents.body); // Todo: Add a callback config that can be used to handle this in a custom way.
       } finally {
