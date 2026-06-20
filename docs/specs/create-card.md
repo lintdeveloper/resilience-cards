@@ -10,7 +10,7 @@ Create a creator card. Returns **HTTP 200** with the created card on success.
 | `description` | no | ≤ 500 chars | VSL |
 | `slug` | no | 5–50 chars; charset `[A-Za-z0-9_-]` | VSL (length) + business (charset) |
 | `creator_reference` | yes | exactly 20 chars | VSL |
-| `links[]` | yes | non-empty; each `title` 1–100, `url` ≤ 200 starting `http(s)://` | VSL |
+| `links[]` | no | each `title` 1–100, `url` ≤ 200 starting `http(s)://` | VSL |
 | `service_rates` | no | if present: `currency` enum, `rates[]` non-empty (`name` 3–100, `description` ≤ 250, `amount` positive int) | VSL + business (int) |
 | `status` | yes | enum `draft \| published` | VSL |
 | `access_type` | no | enum `public \| private` (default `public`) | VSL |
