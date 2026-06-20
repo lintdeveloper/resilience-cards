@@ -1,7 +1,9 @@
 # 0002 — Map assessment error codes to HTTP status via the template error utility
 
-- **Status:** Accepted
+- **Status:** Superseded by [ADR 0005](0005-top-level-error-code.md) (the `data.code` placement is replaced by a top-level `code`)
 - **Date:** 2026-06-19
+
+> The HTTP-status mapping below still stands (400 via `INVLDDATA`, 404 via `NOTFOUND`, 403 via `INVLDREQ`). What changed: the assessment requires the code at the **top level** of the error body, not under `data`. See ADR 0005.
 
 ## Context
 

@@ -64,9 +64,7 @@ statusCode = !error.isApplicationError ? 500 : ERROR_STATUS_CODE_MAPPING[error.e
 - **404** (NF01, NF02): throw with `ERROR_CODE.NOTFOUND` (`'RESOURCE_NOT_FOUND'`).
 - **403** (AC03, AC04): throw with `ERROR_CODE.INVLDREQ` (`'INVALID_REQUEST'`).
 
-**The error body does NOT include a top-level `code`.** Verified empirically: the server emits `{ status:'error', message, errors: error.details, data: error.context }`. We surface the assessment code via `context` so it lands at **`data.code`**: `throwAppError(msg, ERROR_CODE.NOTFOUND, { context: { code: 'NF02' } })` → HTTP 404 `{ status:'error', message, data:{ code:'NF02' } }`.
-
-> ⚠️ The assessment *documents* a top-level `code`. We keep `core/` pristine (decision), so our code is nested under `data`. Producing a top-level `code` would require a one-line edit to `core/express/server.js` (`body.code = error.errorCode`) — out of scope unless grading proves it checks `body.code` strictly. See `docs/adr/0002-error-codes-to-http-status.md`. Centralise raising in one app helper so this stays a one-place change.
+**Error code is emitted at the TOP LEVEL** as the spec requires: `{ status:'error', message, code }`. Raise business errors via `throwCardError(code)` (`services/creator-cards/helpers/throw-card-error.js`), which calls `throwAppError(message, ERROR_CODE.X, { context: { code: 'NF02' } })`. A small documented edit in `core/express/server.js` (catch block) lifts `error.context.code` to `body.code`. This is the **one** intentional deviation from "keep `core/` pristine" — see `docs/adr/0005-top-level-error-code.md`. VSL field-validation errors carry no custom code (their `errors` array still flows).
 
 Success envelope: `{ status:'success', message, data }`. Use the **exact** messages: `"Creator Card Created Successfully."`, `"Creator Card Retrieved Successfully."`, `"Creator Card Deleted Successfully."` (keep these in `messages/`, never hardcoded).
 
