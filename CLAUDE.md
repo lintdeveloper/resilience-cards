@@ -105,6 +105,6 @@ VSL syntax (verified against `core/validator-vsl/tests/*.js`):
 
 - `docs/creator-card-spec.md` — the authoritative assessment contract.
 - `docs/adr/` — architecture decision records (template-vs-monorepo, error-code→HTTP, validation/slug strategy). Read these for the *why*.
-- `specs/creator-cards/` — VSL specs for this service: `data/creator-card.go` (model) + `endpoint/*.endpoint.go` (the three API contracts). `.go` extension is for syntax highlighting only — these are VSL, not Go.
+- `docs/specs/` — detailed markdown specs: `data-model.md` (every field rule + which layer enforces it) and one file per endpoint with request/response shapes and error codes.
 - `README.md` and `documentation.md` — upstream template's own architecture/usage guides (detailed VSL + core API reference). Keep for reference.
-- `specs/examples/` — example endpoint/data specs from the template.
+- `specs/examples/` — the template's own VSL spec examples (`.go` extension = syntax highlighting only). We document our own specs in `docs/` as markdown instead; field rules still live inline in the service code as VSL.

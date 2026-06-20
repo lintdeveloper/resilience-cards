@@ -32,4 +32,4 @@ Two layers, in this order, inside each service (after the template pattern *vali
 
 - **Positive:** Each rule lives where it can actually be enforced; field errors and business errors get the response shapes the spec wants. Charset rules are unit-testable in isolation.
 - **Negative:** Validation for a single field is split across two layers — must be read together. Mitigated by keeping both in the service file, field-validation immediately followed by business-rule checks, and documenting in `CLAUDE.md`.
-- Uniqueness relies on a **unique index on `slug`** (see `specs/creator-cards/data/creator-card.go`); the service still pre-checks to return `SL02` cleanly, and should treat a duplicate-key write error as the same condition to avoid a race.
+- Uniqueness relies on a **unique index on `slug`** (see `docs/specs/data-model.md`); the service still pre-checks to return `SL02` cleanly, and should treat a duplicate-key write error as the same condition to avoid a race.
