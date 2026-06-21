@@ -1,0 +1,21 @@
+# Render Blueprint — deploy the Creator Card API.
+# Either commit this and use "New + > Blueprint" on render.com, or configure the
+# same values manually in a Web Service. MONGODB_URI is set in the dashboard (secret).
+services:
+  - type: web
+    name: resilience-cards
+    runtime: node
+    plan: free
+    branch: main
+    region: oregon
+    buildCommand: npm install
+    startCommand: node bootstrap.js
+    autoDeploy: true
+    envVars:
+      - key: MONGODB_URI
+        sync: false # set in the Render dashboard (MongoDB Atlas connection string)
+      - key: PINO_LOG_LEVEL
+        value: info
+      - key: NODE_VERSION
+        value: 20.19.6
+      # Do NOT set USE_MOCK_MODEL — it must be empty so the real database is used.
