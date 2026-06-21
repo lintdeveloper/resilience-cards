@@ -6,12 +6,19 @@ const fs = require('fs');
 const { createServer } = require('@app-core/server');
 const { createConnection } = require('@app-core/mongoose');
 const { createQueue } = require('@app-core/queue');
+const { appLogger } = require('@app-core/logger');
 
 const canLogEndpointInformation = process.env.CAN_LOG_ENDPOINT_INFORMATION;
 
-createConnection({
-  uri: process.env.MONGODB_URI,
-});
+// Connect to Mongo with explicit logging so deployment issues are visible in
+// the logs, and so a failed connection logs an error instead of crashing the
+// process via an unhandled rejection.
+if (!process.env.MONGODB_URI) {
+  appLogger.warn({}, 'mongo-uri-missing: MONGODB_URI is not set — database operations will fail');
+}
+createConnection({ uri: process.env.MONGODB_URI })
+  .then(() => appLogger.info({ status: 'connected' }, 'mongo-connection-ok'))
+  .catch((e) => appLogger.errorX({ error: e.message }, 'mongo-connection-failed'));
 
 createQueue();
 
