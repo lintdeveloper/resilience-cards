@@ -3,8 +3,9 @@ const { CreatorCardMessages } = require('@app/messages');
 
 // Single place that maps each assessment business code to (a) the template
 // ERROR_CODE that drives the HTTP status and (b) its exact message. The code is
-// surfaced under response `data.code` via `context` (see ADR 0002). Keeping this
-// centralized means the response shape is changeable in one spot.
+// passed via `context` and lifted to the TOP LEVEL of the response as `code`
+// by core/express/server.js (see ADR 0005). Keeping this centralized means the
+// response shape is changeable in one spot.
 const CODE_MAP = {
   SL02: { errorCode: ERROR_CODE.INVLDDATA, message: CreatorCardMessages.SLUG_TAKEN }, // 400
   AC01: {

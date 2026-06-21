@@ -1,6 +1,6 @@
 {
   "name": "resilience-cards",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Creator Card Microservice API — R17 Node.js backend assessment",
   "main": "app.js",
   "type": "commonjs",
@@ -18,7 +18,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "commitlint": "commitlint --edit",
     "sync-envs": "node sync-env-files"
   },
